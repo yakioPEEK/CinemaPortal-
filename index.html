@@ -1,0 +1,1643 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>КиноПортал</title>
+    <link rel="icon" href="img/icon.png" type="image/png">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        :root {
+            --primary: #00b8d4;
+            --primary-dark: #008ba3;
+            --secondary: #1e1e2d;
+            --accent: #ff4081;
+            --light: #ffffff;
+            --gray: #b0b0b0;
+            --dark: #121212;
+            --card-bg: #1e1e2d;
+            --header-height: 70px;
+            --page-bg: #121220;
+            --transition: all 0.3s ease;
+        }
+
+        body {
+            background: var(--page-bg);
+            color: var(--light);
+            min-height: 100vh;
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 15px;
+        }
+
+        /* Header Styles */
+        header {
+            background: linear-gradient(to right, #1e1e2d, #2c2c3e);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            height: var(--header-height);
+            display: flex;
+            align-items: center;
+            backdrop-filter: blur(5px);
+        }
+
+        .header-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            width: 100%;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            font-size: 28px;
+            font-weight: 800;
+            color: var(--light);
+            text-decoration: none;
+            letter-spacing: -0.5px;
+        }
+
+        .logo span {
+            color: var(--primary);
+        }
+
+        nav ul {
+            display: flex;
+            list-style: none;
+        }
+
+        nav ul li {
+            margin: 0 8px;
+        }
+
+        nav ul li a {
+            color: var(--light);
+            text-decoration: none;
+            font-weight: 500;
+            padding: 8px 15px;
+            border-radius: 20px;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            font-size: 16px;
+            opacity: 0.8;
+        }
+
+        nav ul li a i {
+            margin-right: 8px;
+            font-size: 18px;
+        }
+
+        nav ul li a:hover, nav ul li a.active {
+            background: rgba(0, 184, 212, 0.1);
+            color: var(--primary);
+            opacity: 1;
+        }
+
+        .user-actions {
+            display: flex;
+            align-items: center;
+        }
+
+        .search-bar {
+            display: flex;
+            width: 300px;
+            margin-right: 20px;
+            position: relative;
+        }
+
+        .search-bar input {
+            width: 100%;
+            padding: 12px 20px;
+            border: none;
+            border-radius: 30px;
+            background: rgba(255, 255, 255, 0.08);
+            color: var(--light);
+            font-size: 16px;
+            padding-left: 45px;
+            transition: var(--transition);
+        }
+
+        .search-bar input:focus {
+            background: rgba(255, 255, 255, 0.15);
+            outline: none;
+        }
+
+        .search-bar i {
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--gray);
+        }
+
+        .user-btn {
+            background: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: var(--transition);
+            font-size: 18px;
+        }
+
+        .user-btn:hover {
+            background: var(--primary-dark);
+            transform: scale(1.05);
+        }
+
+        /* Page Content */
+        .page {
+            display: none;
+            padding: 30px 0 60px;
+            min-height: calc(100vh - var(--header-height) - 150px);
+            animation: fadeIn 0.5s ease;
+        }
+
+        .page.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Hero Section */
+        .hero {
+            height: 450px;
+            background: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.8)), 
+                        url('https://png.pngtree.com/thumb_back/fw800/background/20240705/pngtree-movie-wallpaper-images-image_15975849.jpg') no-repeat center center/cover;
+            border-radius: 12px;
+            margin-bottom: 40px;
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            padding: 0 50px;
+        }
+
+        .hero-content {
+            max-width: 600px;
+            z-index: 2;
+        }
+
+        .hero h1 {
+            font-size: 42px;
+            margin-bottom: 20px;
+            line-height: 1.2;
+        }
+
+        .hero p {
+            font-size: 18px;
+            margin-bottom: 30px;
+            color: #e0e0e0;
+            max-width: 500px;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            padding: 14px 32px;
+            background: var(--primary);
+            color: white;
+            text-decoration: none;
+            border-radius: 30px;
+            font-weight: 600;
+            transition: var(--transition);
+            border: none;
+            cursor: pointer;
+            font-size: 16px;
+            box-shadow: 0 4px 15px rgba(0, 184, 212, 0.3);
+        }
+
+        .btn i {
+            margin-right: 10px;
+        }
+
+        .btn:hover {
+            background: var(--primary-dark);
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(0, 184, 212, 0.4);
+        }
+
+        /* Main Content */
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin: 40px 0 25px;
+        }
+
+        .section-title {
+            font-size: 28px;
+            font-weight: 700;
+            position: relative;
+            padding-bottom: 10px;
+        }
+
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 50px;
+            height: 3px;
+            background: var(--primary);
+        }
+
+        .view-all {
+            color: var(--primary);
+            text-decoration: none;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+        }
+
+        .view-all i {
+            margin-left: 8px;
+            transition: var(--transition);
+        }
+
+        .view-all:hover i {
+            transform: translateX(5px);
+        }
+
+        /* Movie Cards */
+        .movie-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 25px;
+            margin-bottom: 50px;
+        }
+
+        .movie-card {
+            background: var(--card-bg);
+            border-radius: 12px;
+            overflow: hidden;
+            transition: var(--transition);
+            box-shadow: 0 6px 16px rgba(0, 0, 0, 0.3);
+            position: relative;
+            cursor: pointer;
+        }
+
+        .movie-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 12px 25px rgba(0, 0, 0, 0.4);
+        }
+
+        .movie-poster {
+            width: 100%;
+            height: 300px;
+            background-size: cover;
+            background-position: center;
+            position: relative;
+        }
+
+        .movie-badge {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: var(--accent);
+            color: white;
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+            z-index: 2;
+        }
+
+        .movie-hd {
+            position: absolute;
+            bottom: 15px;
+            left: 15px;
+            background: rgba(0, 0, 0, 0.7);
+            color: white;
+            padding: 3px 10px;
+            border-radius: 4px;
+            font-size: 12px;
+            font-weight: 500;
+        }
+
+        .movie-info {
+            padding: 15px;
+        }
+
+        .movie-title {
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 8px;
+            height: 45px;
+            overflow: hidden;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+        }
+
+        .movie-meta {
+            display: flex;
+            justify-content: space-between;
+            color: var(--gray);
+            font-size: 14px;
+        }
+
+        .rating {
+            color: #ffc107;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+        }
+
+        .rating i {
+            margin-right: 4px;
+        }
+
+        /* Categories */
+        .categories {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin-bottom: 40px;
+        }
+
+        .category {
+            background: rgba(255, 255, 255, 0.08);
+            color: var(--light);
+            padding: 12px 25px;
+            border-radius: 30px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .category:hover, .category.active {
+            background: var(--primary);
+            color: white;
+        }
+
+        /* Actors Section */
+        .actors-section {
+            position: relative;
+            margin: 60px 0;
+        }
+        
+        .actors-container {
+            display: flex;
+            overflow: hidden;
+            position: relative;
+        }
+        
+        .actors-slide {
+            display: flex;
+            transition: transform 0.5s ease;
+            min-width: 100%;
+        }
+        
+        .actor-card {
+            flex: 0 0 calc(100% / 6);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 15px;
+            text-align: center;
+        }
+        
+        .actor-photo {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 3px solid var(--primary);
+            margin-bottom: 15px;
+            transition: var(--transition);
+        }
+        
+        .actor-card:hover .actor-photo {
+            transform: scale(1.05);
+            border-color: var(--accent);
+            box-shadow: 0 0 15px rgba(255, 64, 129, 0.5);
+        }
+        
+        .actor-name {
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+        
+        .actor-role {
+            color: var(--gray);
+            font-size: 14px;
+        }
+        
+        .actors-nav {
+            display: flex;
+            justify-content: center;
+            margin-top: 20px;
+            gap: 10px;
+        }
+        
+        .actor-btn {
+            background: var(--primary);
+            border: none;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+        
+        .actor-btn:hover {
+            background: var(--primary-dark);
+            transform: scale(1.1);
+        }
+        
+        .actor-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        /* Footer */
+        footer {
+            background: linear-gradient(to right, #1a1a28, #1e1e2d);
+            padding: 50px 0 20px;
+            margin-top: 50px;
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 40px;
+            margin-bottom: 40px;
+        }
+
+        .footer-section h3 {
+            font-size: 20px;
+            margin-bottom: 20px;
+            position: relative;
+            padding-bottom: 10px;
+        }
+
+        .footer-section h3::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 40px;
+            height: 2px;
+            background: var(--primary);
+        }
+
+        .footer-links {
+            list-style: none;
+        }
+
+        .footer-links li {
+            margin-bottom: 12px;
+        }
+
+        .footer-links a {
+            color: var(--gray);
+            text-decoration: none;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+        }
+
+        .footer-links a i {
+            margin-right: 8px;
+            width: 20px;
+            color: var(--primary);
+        }
+
+        .footer-links a:hover {
+            color: var(--primary);
+            transform: translateX(5px);
+        }
+
+        .social-links {
+            display: flex;
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .social-links a {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.08);
+            color: white;
+            transition: var(--transition);
+            font-size: 18px;
+        }
+
+        .social-links a:hover {
+            background: var(--primary);
+            transform: translateY(-5px);
+        }
+
+        .app-download {
+            display: flex;
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .app-btn {
+            display: block;
+            width: 140px;
+            height: 45px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: var(--transition);
+            text-decoration: none;
+        }
+
+        .app-btn:hover {
+            background: var(--primary);
+            transform: translateY(-3px);
+        }
+
+        .copyright {
+            text-align: center;
+            padding-top: 30px;
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+            color: var(--gray);
+            font-size: 14px;
+        }
+
+        /* Responsive */
+        @media (max-width: 1200px) {
+            .actor-card {
+                flex: 0 0 calc(100% / 5);
+            }
+        }
+        
+        @media (max-width: 992px) {
+            .hero h1 {
+                font-size: 32px;
+            }
+            
+            .movie-grid {
+                grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+            }
+            
+            .search-bar {
+                width: 200px;
+            }
+            
+            .actor-card {
+                flex: 0 0 calc(100% / 4);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .header-container {
+                flex-wrap: wrap;
+                height: auto;
+                padding: 15px 0;
+            }
+            
+            nav {
+                order: 3;
+                width: 100%;
+                margin-top: 15px;
+            }
+            
+            nav ul {
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+            
+            .search-bar {
+                width: 100%;
+                margin: 15px 0;
+            }
+            
+            .hero {
+                height: 350px;
+                padding: 0 20px;
+            }
+            
+            .hero h1 {
+                font-size: 28px;
+            }
+            
+            .section-title {
+                font-size: 24px;
+            }
+            
+            .actor-card {
+                flex: 0 0 calc(100% / 3);
+            }
+        }
+
+        @media (max-width: 480px) {
+            .movie-grid {
+                grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+                gap: 15px;
+            }
+            
+            .hero {
+                height: 300px;
+            }
+            
+            .btn {
+                padding: 12px 25px;
+            }
+            
+            .footer-content {
+                grid-template-columns: 1fr;
+            }
+            
+            .actor-card {
+                flex: 0 0 calc(100% / 2);
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="container header-container">
+            <a href="#" class="logo" data-page="home">
+                Кино<span>Портал</span>
+            </a>
+            
+            <nav>
+                <ul>
+                    <li><a href="#" class="active" data-page="home"><i class="fas fa-home"></i> Главная</a></li>
+                    <li><a href="#" data-page="movies"><i class="fas fa-ticket-alt"></i> Фильмы</a></li>
+                    <li><a href="#" data-page="series"><i class="fas fa-tv"></i> Сериалы</a></li>
+                    <li><a href="#" data-page="profile"><i class="fas fa-user"></i> Профиль</a></li>
+                </ul>
+            </nav>
+            
+            <div class="user-actions">
+                <div class="search-bar">
+                    <i class="fas fa-search"></i>
+                    <input type="text" placeholder="Поиск фильмов, сериалов...">
+                </div>
+                <button class="user-btn">
+                    <i class="fas fa-user"></i>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Home Page -->
+    <section id="home" class="page active">
+        <!-- Hero Section -->
+        <section class="hero">
+            <div class="hero-content">
+                <h1>Откройте мир кино заново</h1>
+                <p>Огромная коллекция фильмов, сериалов и мультфильмов. Рейтинги, рецензии и рекомендации.</p>
+                <a href="#" class="btn" data-page="movies"><i class="fas fa-play"></i> Смотреть новинки</a>
+            </div>
+        </section>
+
+        <div class="container">
+            <!-- Categories -->
+            <div class="categories">
+                <div class="category active">Все</div>
+                <div class="category">Боевики</div>
+                <div class="category">Комедии</div>
+                <div class="category">Драмы</div>
+                <div class="category">Фантастика</div>
+                <div class="category">Триллеры</div>
+                <div class="category">Мультфильмы</div>
+                <div class="category">Документальные</div>
+            </div>
+
+            <!-- Popular Movies -->
+            <div class="section-header">
+                <h2 class="section-title">Популярные фильмы</h2>
+                <a href="#" class="view-all" data-page="movies">Смотреть все <i class="fas fa-chevron-right"></i></a>
+            </div>
+            <div class="movie-grid">
+                <!-- Movie Cards -->
+                <div class="movie-card">
+                    <div class="movie-poster" style="background-image: url('https://avatars.mds.yandex.net/get-kinopoisk-image/4486454/c5292109-642c-4ab0-894a-cc304e1bcec4/600x900');">
+                        <div class="movie-badge">Новинка</div>
+                        <div class="movie-hd">HD</div>
+                    </div>
+                    <div class="movie-info">
+                        <div class="movie-title">Оппенгеймер</div>
+                        <div class="movie-meta">
+                            <span>2023</span>
+                            <span class="rating"><i class="fas fa-star"></i> 8.7</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="movie-card">
+                    <div class="movie-poster" style="background-image: url('https://media.kg-portal.ru/movies/d/dunepart2/posters/dunepart2_1.jpg');">
+                        <div class="movie-badge">Выбор редакции</div>
+                        <div class="movie-hd">4K</div>
+                    </div>
+                    <div class="movie-info">
+                        <div class="movie-title">Дюна: Часть вторая</div>
+                        <div class="movie-meta">
+                            <span>2023</span>
+                            <span class="rating"><i class="fas fa-star"></i> 8.5</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="movie-card">
+                    <div class="movie-poster" style="background-image: url('https://avatars.mds.yandex.net/get-kinopoisk-image/4486362/035526ab-de61-442c-9a05-a679df0b02d0/600x900');">
+                        <div class="movie-badge">Новинка</div>
+                        <div class="movie-hd">HD</div>
+                    </div>
+                    <div class="movie-info">
+                        <div class="movie-title">Барби</div>
+                        <div class="movie-meta">
+                            <span>2023</span>
+                            <span class="rating"><i class="fas fa-star"></i> 7.8</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="movie-card">
+                    <div class="movie-poster" style="background-image: url('https://thumbs.dfs.ivi.ru/storage0/contents/4/1/eb87206b1744bda60fbbbdf7409a24.jpg');">
+                        <div class="movie-hd">4K</div>
+                    </div>
+                    <div class="movie-info">
+                        <div class="movie-title">Джон Уик 4</div>
+                        <div class="movie-meta">
+                            <span>2023</span>
+                            <span class="rating"><i class="fas fa-star"></i> 8.0</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="movie-card">
+                    <div class="movie-poster" style="background-image: url('https://www.film.ru/sites/default/files/styles/thumb_260x400/public/movies/posters/49600181-2526666.jpeg');">
+                        <div class="movie-badge">Новинка</div>
+                        <div class="movie-hd">HD</div>
+                    </div>
+                    <div class="movie-info">
+                        <div class="movie-title">Человек-паук: Паутина вселенных</div>
+                        <div class="movie-meta">
+                            <span>2023</span>
+                            <span class="rating"><i class="fas fa-star"></i> 8.6</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="movie-card">
+                    <div class="movie-poster" style="background-image: url('https://avatars.mds.yandex.net/get-kinopoisk-image/4716873/a291432b-f686-4bc0-ad5a-2ced30fd6d8f/600x900');">
+                        <div class="movie-badge">Скоро</div>
+                        <div class="movie-hd">HD</div>
+                    </div>
+                    <div class="movie-info">
+                        <div class="movie-title">Миссия невыполнима 7</div>
+                        <div class="movie-meta">
+                            <span>2023</span>
+                            <span class="rating"><i class="fas fa-star"></i> -</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Дополнительные фильмы -->
+                <div class="movie-card">
+                    <div class="movie-poster" style="background-image: url('https://upload.wikimedia.org/wikipedia/ru/b/b3/%D0%90%D0%B2%D0%B0%D1%82%D0%B0%D1%80_%D0%9F%D1%83%D1%82%D1%8C_%D0%B2%D0%BE%D0%B4%D1%8B_%D0%BF%D0%BE%D1%81%D1%82%D0%B5%D1%80.jpg');">
+                        <div class="movie-hd">4K</div>
+                    </div>
+                    <div class="movie-info">
+                        <div class="movie-title">Аватар: Путь воды</div>
+                        <div class="movie-meta">
+                            <span>2022</span>
+                            <span class="rating"><i class="fas fa-star"></i> 7.9</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="movie-card">
+                    <div class="movie-poster" style="background-image: url('https://avatars.mds.yandex.net/get-kinopoisk-image/6201401/57f8f038-f628-44d3-922d-fb28f719ff77/600x900');">
+                        <div class="movie-badge">Боевик</div>
+                        <div class="movie-hd">4K</div>
+                    </div>
+                    <div class="movie-info">
+                        <div class="movie-title">Топ Ган: Мэверик</div>
+                        <div class="movie-meta">
+                            <span>2022</span>
+                            <span class="rating"><i class="fas fa-star"></i> 8.4</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="movie-card">
+                    <div class="movie-poster" style="background-image: url('https://avatars.mds.yandex.net/get-kinopoisk-image/4774061/70c20368-a412-43d2-8646-3d3529ce8a7a/600x900');">
+                        <div class="movie-badge">Фантастика</div>
+                        <div class="movie-hd">HD</div>
+                    </div>
+                    <div class="movie-info">
+                        <div class="movie-title">Чёрная Пантера 2</div>
+                        <div class="movie-meta">
+                            <span>2022</span>
+                            <span class="rating"><i class="fas fa-star"></i> 7.2</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="movie-card">
+                    <div class="movie-poster" style="background-image: url('https://images.kinorium.com/movie/poster/577691/h280_54692843.jpg');">
+                        <div class="movie-hd">4K</div>
+                    </div>
+                    <div class="movie-info">
+                        <div class="movie-title">Бэтмен</div>
+                        <div class="movie-meta">
+                            <span>2022</span>
+                            <span class="rating"><i class="fas fa-star"></i> 7.9</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Popular Series -->
+            <div class="section-header">
+                <h2 class="section-title">Популярные сериалы</h2>
+                <a href="#" class="view-all" data-page="series">Смотреть все <i class="fas fa-chevron-right"></i></a>
+            </div>
+            <div class="movie-grid">
+                <div class="movie-card">
+                    <div class="movie-poster" style="background-image: url('https://avatars.mds.yandex.net/get-kinopoisk-image/4303601/4639b97f-1ff6-4f63-b7f6-02ea1a14f553/220x330');">
+                        <div class="movie-badge">Новый сезон</div>
+                        <div class="movie-hd">HD</div>
+                    </div>
+                    <div class="movie-info">
+                        <div class="movie-title">Очень странные дела</div>
+                        <div class="movie-meta">
+                            <span>2016-2024</span>
+                            <span class="rating"><i class="fas fa-star"></i> 8.7</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="movie-card">
+                    <div class="movie-poster" style="background-image: url('https://upload.wikimedia.org/wikipedia/ru/4/49/Game_of_Thrones.jpg');">
+                        <div class="movie-hd">4K</div>
+                    </div>
+                    <div class="movie-info">
+                        <div class="movie-title">Игра престолов</div>
+                        <div class="movie-meta">
+                            <span>2011-2019</span>
+                            <span class="rating"><i class="fas fa-star"></i> 9.3</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="movie-card">
+                    <div class="movie-poster" style="background-image: url('https://avatars.mds.yandex.net/get-kinopoisk-image/1773646/21324634-7afd-4443-8ac4-5c4097ac5b6c/220x330');">
+                        <div class="movie-badge">Новый сезон</div>
+                        <div class="movie-hd">HD</div>
+                    </div>
+                    <div class="movie-info">
+                        <div class="movie-title">Пацаны</div>
+                        <div class="movie-meta">
+                            <span>2019-...</span>
+                            <span class="rating"><i class="fas fa-star"></i> 8.7</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="movie-card">
+                    <div class="movie-poster" style="background-image: url('https://avatars.mds.yandex.net/get-kinopoisk-image/1900788/fb35416f-3b0d-4b96-bc65-cf6923f9e329/220x330');">
+                        <div class="movie-hd">4K</div>
+                    </div>
+                    <div class="movie-info">
+                        <div class="movie-title">Во все тяжкие</div>
+                        <div class="movie-meta">
+                            <span>2008-2013</span>
+                            <span class="rating"><i class="fas fa-star"></i> 9.5</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Дополнительные сериалы -->
+                <div class="movie-card">
+                    <div class="movie-poster" style="background-image: url('https://avatars.mds.yandex.net/get-kinopoisk-image/1898899/57ad896e-6eeb-4242-af4a-bd47c3ad24d1/220x330');">
+                        <div class="movie-badge">Фантастика</div>
+                        <div class="movie-hd">4K</div>
+                    </div>
+                    <div class="movie-info">
+                        <div class="movie-title">Мандалорец</div>
+                        <div class="movie-meta">
+                            <span>2019-...</span>
+                            <span class="rating"><i class="fas fa-star"></i> 8.8</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="movie-card">
+                    <div class="movie-poster" style="background-image: url('https://avatars.mds.yandex.net/get-kinopoisk-image/6201401/96a25d67-aa56-4496-bcac-1471e811582a/220x330');">
+                        <div class="movie-badge">Фэнтези</div>
+                        <div class="movie-hd">HD</div>
+                    </div>
+                    <div class="movie-info">
+                        <div class="movie-title">Ведьмак</div>
+                        <div class="movie-meta">
+                            <span>2019-...</span>
+                            <span class="rating"><i class="fas fa-star"></i> 8.2</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Actors Section -->
+            <div class="actors-section">
+                <div class="section-header">
+                    <h2 class="section-title">Популярные актеры</h2>
+                </div>
+                
+                <div class="actors-container">
+                    <div class="actors-slide" id="actors-slide-1">
+                        <!-- Slide 1 -->
+                        <div class="actor-card">
+                            <img src="https://avatars.mds.yandex.net/get-kinopoisk-image/1600647/9c33caef-be28-4257-b7ed-a407698f1a32/220x330" alt="Актер" class="actor-photo">
+                            <div class="actor-name">Леонардо ДиКаприо</div>
+                            <div class="actor-role">Оппенгеймер</div>
+                        </div>
+                        
+                        <div class="actor-card">
+                            <img src="https://avatars.mds.yandex.net/get-kinopoisk-image/1898899/8048147e-07dc-4e65-8e0d-c90206e4ed97/360" alt="Актер" class="actor-photo">
+                            <div class="actor-name">Марго Робби</div>
+                            <div class="actor-role">Барби</div>
+                        </div>
+                        
+                        <div class="actor-card">
+                            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRGh9H4Lf0W3XI9IiarT45tUgQTZafgRpa0eg&s" alt="Актер" class="actor-photo">
+                            <div class="actor-name">Киану Ривз</div>
+                            <div class="actor-role">Джон Уик</div>
+                        </div>
+                        
+                        <div class="actor-card">
+                            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRp1_E6bDp39PQI1ook0MUaaXV9kgHzvFNO3g&s" alt="Актер" class="actor-photo">
+                            <div class="actor-name">Зендая</div>
+                            <div class="actor-role">Дюна</div>
+                        </div>
+                        
+                        <div class="actor-card">
+                            <img src="https://repost.uz/storage/uploads/0-1720422976-portal-post-material.jpeg" alt="Актер" class="actor-photo">
+                            <div class="actor-name">Том Круз</div>
+                            <div class="actor-role">Миссия невыполнима</div>
+                        </div>
+                        
+                        <div class="actor-card">
+                            <img src="https://www.proficinema.com/upload/iblock/885/885fa8ccfe92273fb8f19c104ca1c586.jpg" alt="Актер" class="actor-photo">
+                            <div class="actor-name">Скарлетт Йоханссон</div>
+                            <div class="actor-role">Черная Вдова</div>
+                        </div>
+                    </div>
+                    
+                    <div class="actors-slide" id="actors-slide-2" style="display: none;">
+                        <!-- Slide 2 -->
+                        <div class="actor-card">
+                            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/8/8c/Robert_Pattinson_at_Berlinale_2025.jpg/960px-Robert_Pattinson_at_Berlinale_2025.jpg" alt="Актер" class="actor-photo">
+                            <div class="actor-name">Роберт Паттинсон</div>
+                            <div class="actor-role">Бэтмен</div>
+                        </div>
+                        
+                        <div class="actor-card">
+                            <img src="https://m.ticketon.kz/files/media/ana-dearmas.jpg" alt="Актер" class="actor-photo">
+                            <div class="actor-name">Ана де Армас</div>
+                            <div class="actor-role">Девушка из Джонсвилля</div>
+                        </div>
+                        
+                        <div class="actor-card">
+                            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTUmhvfu8qLu7TUeir69xZta1Evt8Elu0qaEA&s" alt="Актер" class="actor-photo">
+                            <div class="actor-name">Тимоти Шаламе</div>
+                            <div class="actor-role">Дюна</div>
+                        </div>
+                        
+                        <div class="actor-card">
+                            <img src="https://avatars.mds.yandex.net/get-kinopoisk-image/4774061/aed40aa0-fac3-41a0-acc0-35344a7b6059/220x330" alt="Актер" class="actor-photo">
+                            <div class="actor-name">Флоренс Пью</div>
+                            <div class="actor-role">Черная Вдова</div>
+                        </div>
+                        
+                        <div class="actor-card">
+                            <img src="https://s0.rbk.ru/v6_top_pics/media/img/0/68/756688117265680.jpg" alt="Актер" class="actor-photo">
+                            <div class="actor-name">Крис Хемсворт</div>
+                            <div class="actor-role">Тор</div>
+                        </div>
+                        
+                        <div class="actor-card">
+                            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/4/4f/Jennifer_Lawrence_at_the_83rd_Academy_Awards_crop.jpg/250px-Jennifer_Lawrence_at_the_83rd_Academy_Awards_crop.jpg" alt="Актер" class="actor-photo">
+                            <div class="actor-name">Дженнифер Лоуренс</div>
+                            <div class="actor-role">Голодные игры</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="actors-nav">
+                    <button class="actor-btn" id="prev-actors">
+                        <i class="fas fa-chevron-left"></i>
+                    </button>
+                    <button class="actor-btn" id="next-actors">
+                        <i class="fas fa-chevron-right"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Movies Page -->
+    <section id="movies" class="page">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">Все фильмы</h2>
+            </div>
+            
+            <div class="categories">
+                <div class="category active">Все жанры</div>
+                <div class="category">Боевики</div>
+                <div class="category">Комедии</div>
+                <div class="category">Драмы</div>
+                <div class="category">Фантастика</div>
+                <div class="category">Фэнтези</div>
+                <div class="category">Триллеры</div>
+                <div class="category">Ужасы</div>
+            </div>
+            
+            <div class="movie-grid">
+                <!-- 12 movie cards -->
+                <div class="movie-card">
+                    <div class="movie-poster" style="background-image: url('https://media.kg-portal.ru/movies/f/furious10/posters/furious10_3t.jpg');">
+                        <div class="movie-badge">Боевик</div>
+                        <div class="movie-hd">HD</div>
+                    </div>
+                    <div class="movie-info">
+                        <div class="movie-title">Форсаж 10</div>
+                        <div class="movie-meta">
+                            <span>2023</span>
+                            <span class="rating"><i class="fas fa-star"></i> 7.2</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="movie-card">
+                    <div class="movie-poster" style="background-image: url('https://simg.marwin.kz/media/catalog/product/cache/8d1771fdd19ec2393e47701ba45e606d/0/b/0b7773b75793bafcd2c8e241bafcd53f.jpg');">
+                        <div class="movie-badge">Комедия</div>
+                        <div class="movie-hd">HD</div>
+                    </div>
+                    <div class="movie-info">
+                        <div class="movie-title">Самый пьяный округ</div>
+                        <div class="movie-meta">
+                            <span>2022</span>
+                            <span class="rating"><i class="fas fa-star"></i> 7.8</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 10 more movie cards -->
+                <div class="movie-card">
+                    <div class="movie-poster" style="background-image: url('https://avatars.mds.yandex.net/get-kinopoisk-image/6201401/81287543-74b0-467c-a1e9-2feafb7c5c42/600x900');">
+                        <div class="movie-badge">Боевик</div>
+                        <div class="movie-hd">4K</div>
+                    </div>
+                    <div class="movie-info">
+                        <div class="movie-title">Джентльмены</div>
+                        <div class="movie-meta">
+                            <span>2019</span>
+                            <span class="rating"><i class="fas fa-star"></i> 8.0</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="movie-card">
+                    <div class="movie-poster" style="background-image: url('https://upload.wikimedia.org/wikipedia/ru/f/f0/Green_Book.jpg');">
+                        <div class="movie-badge">Драма</div>
+                        <div class="movie-hd">HD</div>
+                    </div>
+                    <div class="movie-info">
+                        <div class="movie-title">Зеленая книга</div>
+                        <div class="movie-meta">
+                            <span>2018</span>
+                            <span class="rating"><i class="fas fa-star"></i> 8.2</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="movie-card">
+                    <div class="movie-poster" style="background-image: url('https://upload.wikimedia.org/wikipedia/ru/0/08/The_Lord_of_the_Rings._The_Fellowship_of_the_Ring_%E2%80%94_movie.jpg');">
+                        <div class="movie-badge">Фэнтези</div>
+                        <div class="movie-hd">4K</div>
+                    </div>
+                    <div class="movie-info">
+                        <div class="movie-title">Властелин колец: Братство кольца</div>
+                        <div class="movie-meta">
+                            <span>2001</span>
+                            <span class="rating"><i class="fas fa-star"></i> 8.8</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="movie-card">
+                    <div class="movie-poster" style="background-image: url('https://upload.wikimedia.org/wikipedia/ru/7/77/%D0%A4%D0%B8%D0%BB%D1%8C%D0%BC_%D0%9F%D0%B0%D1%80%D0%B0%D0%B7%D0%B8%D1%82%D1%8B_%28Gisaengchung%29.png');">
+                        <div class="movie-badge">Триллер</div>
+                        <div class="movie-hd">HD</div>
+                    </div>
+                    <div class="movie-info">
+                        <div class="movie-title">Паразиты</div>
+                        <div class="movie-meta">
+                            <span>2019</span>
+                            <span class="rating"><i class="fas fa-star"></i> 8.6</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="movie-card">
+                    <div class="movie-poster" style="background-image: url('https://upload.wikimedia.org/wikipedia/ru/f/ff/%D0%9E%D0%BD%D0%BE_%28%D0%BF%D0%BE%D1%81%D1%82%D0%B5%D1%80_%D1%84%D0%B8%D0%BB%D1%8C%D0%BC%D0%B0%2C_2017%29.jpg');">
+                        <div class="movie-badge">Ужасы</div>
+                        <div class="movie-hd">HD</div>
+                    </div>
+                    <div class="movie-info">
+                        <div class="movie-title">Оно</div>
+                        <div class="movie-meta">
+                            <span>2017</span>
+                            <span class="rating"><i class="fas fa-star"></i> 7.3</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="movie-card">
+                    <div class="movie-poster" style="background-image: url('https://avatars.mds.yandex.net/get-kinopoisk-image/1600647/430042eb-ee69-4818-aed0-a312400a26bf/600x900');">
+                        <div class="movie-badge">Фантастика</div>
+                        <div class="movie-hd">4K</div>
+                    </div>
+                    <div class="movie-info">
+                        <div class="movie-title">Интерстеллар</div>
+                        <div class="movie-meta">
+                            <span>2014</span>
+                            <span class="rating"><i class="fas fa-star"></i> 8.6</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="movie-card">
+                    <div class="movie-poster" style="background-image: url('https://avatars.mds.yandex.net/get-kinopoisk-image/1599028/cdd49af8-7ba4-42ee-9f92-10ba7e3d021b/220x330');">
+                        <div class="movie-badge">Комедия</div>
+                        <div class="movie-hd">HD</div>
+                    </div>
+                    <div class="movie-info">
+                        <div class="movie-title">Мальчишник в Вегасе</div>
+                        <div class="movie-meta">
+                            <span>2009</span>
+                            <span class="rating"><i class="fas fa-star"></i> 7.7</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="movie-card">
+                    <div class="movie-poster" style="background-image: url('https://upload.wikimedia.org/wikipedia/ru/a/af/%D0%A5%D0%BE%D0%BB%D0%BE%D0%B4%D0%BD%D0%BE%D0%B5_%D1%81%D0%B5%D1%80%D0%B4%D1%86%D0%B5_2.jpg');">
+                        <div class="movie-badge">Мультфильм</div>
+                        <div class="movie-hd">4K</div>
+                    </div>
+                    <div class="movie-info">
+                        <div class="movie-title">Холодное сердце 2</div>
+                        <div class="movie-meta">
+                            <span>2019</span>
+                            <span class="rating"><i class="fas fa-star"></i> 7.0</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="pagination">
+                <button class="btn" style="margin: 0 auto; display: block;"><i class="fas fa-sync-alt"></i> Показать еще</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Series Page -->
+    <section id="series" class="page">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">Все сериалы</h2>
+            </div>
+            
+            <div class="categories">
+                <div class="category active">Все жанры</div>
+                <div class="category">Драмы</div>
+                <div class="category">Комедии</div>
+                <div class="category">Фантастика</div>
+                <div class="category">Фэнтези</div>
+                <div class="category">Криминал</div>
+                <div class="category">Детективы</div>
+            </div>
+            
+            <div class="movie-grid">
+                <!-- 12 series cards -->
+                <div class="movie-card">
+                    <div class="movie-poster" style="background-image: url('https://upload.wikimedia.org/wikipedia/ru/thumb/5/5f/The_Walking_Dead_%28season_3%29.jpg/640px-The_Walking_Dead_%28season_3%29.jpg');">
+                        <div class="movie-badge">Новый сезон</div>
+                        <div class="movie-hd">HD</div>
+                    </div>
+                    <div class="movie-info">
+                        <div class="movie-title">Ходячие мертвецы</div>
+                        <div class="movie-meta">
+                            <span>2010-2022</span>
+                            <span class="rating"><i class="fas fa-star"></i> 8.2</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="movie-card">
+                    <div class="movie-poster" style="background-image: url('https://avatars.mds.yandex.net/get-kinopoisk-image/9784475/2095e907-363a-48ea-bfb4-52964ec01e32/220x330');">
+                        <div class="movie-badge">Драма</div>
+                        <div class="movie-hd">4K</div>
+                    </div>
+                    <div class="movie-info">
+                        <div class="movie-title">Корона</div>
+                        <div class="movie-meta">
+                            <span>2016-2023</span>
+                            <span class="rating"><i class="fas fa-star"></i> 8.7</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 10 more series cards -->
+                <div class="movie-card">
+                    <div class="movie-poster" style="background-image: url('https://avatars.mds.yandex.net/get-kinopoisk-image/1898899/36737195-6026-4310-be80-5545d7d22447/220x330');">
+                        <div class="movie-badge">Фантастика</div>
+                        <div class="movie-hd">4K</div>
+                    </div>
+                    <div class="movie-info">
+                        <div class="movie-title">Черное зеркало</div>
+                        <div class="movie-meta">
+                            <span>2011-...</span>
+                            <span class="rating"><i class="fas fa-star"></i> 8.8</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="movie-card">
+                    <div class="movie-poster" style="background-image: url('https://avatars.mds.yandex.net/get-kinopoisk-image/1629390/ef44d18e-64bb-4179-a413-8faac17e4544/600x900');">
+                        <div class="movie-badge">Драма</div>
+                        <div class="movie-hd">HD</div>
+                    </div>
+                    <div class="movie-info">
+                        <div class="movie-title">Это мы</div>
+                        <div class="movie-meta">
+                            <span>2016-2022</span>
+                            <span class="rating"><i class="fas fa-star"></i> 8.7</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="movie-card">
+                    <div class="movie-poster" style="background-image: url('https://avatars.mds.yandex.net/get-kinopoisk-image/1900788/fb35416f-3b0d-4b96-bc65-cf6923f9e329/220x330');">
+                        <div class="movie-badge">Криминал</div>
+                        <div class="movie-hd">4K</div>
+                    </div>
+                    <div class="movie-info">
+                        <div class="movie-title">Во все тяжкие</div>
+                        <div class="movie-meta">
+                            <span>2008-2013</span>
+                            <span class="rating"><i class="fas fa-star"></i> 9.5</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="movie-card">
+                    <div class="movie-poster" style="background-image: url('https://avatars.mds.yandex.net/get-kinopoisk-image/1900788/35c6cb89-75e3-4efa-8d00-5bbf7175c066/220x330');">
+                        <div class="movie-badge">Комедия</div>
+                        <div class="movie-hd">HD</div>
+                    </div>
+                    <div class="movie-info">
+                        <div class="movie-title">Друзья</div>
+                        <div class="movie-meta">
+                            <span>1994-2004</span>
+                            <span class="rating"><i class="fas fa-star"></i> 8.9</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="movie-card">
+                    <div class="movie-poster" style="background-image: url('https://upload.wikimedia.org/wikipedia/ru/4/49/Game_of_Thrones.jpg');">
+                        <div class="movie-badge">Фэнтези</div>
+                        <div class="movie-hd">4K</div>
+                    </div>
+                    <div class="movie-info">
+                        <div class="movie-title">Игра престолов</div>
+                        <div class="movie-meta">
+                            <span>2011-2019</span>
+                            <span class="rating"><i class="fas fa-star"></i> 9.3</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="movie-card">
+                    <div class="movie-poster" style="background-image: url('https://avatars.mds.yandex.net/get-kinopoisk-image/1629390/f28c1ea2-47b0-49d5-b11c-9608744f0233/220x330');">
+                        <div class="movie-badge">Детектив</div>
+                        <div class="movie-hd">HD</div>
+                    </div>
+                    <div class="movie-info">
+                        <div class="movie-title">Шерлок</div>
+                        <div class="movie-meta">
+                            <span>2010-2017</span>
+                            <span class="rating"><i class="fas fa-star"></i> 9.1</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Profile Page -->
+    <section id="profile" class="page">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">Мой профиль</h2>
+            </div>
+            
+            <div class="profile-card" style="background: var(--card-bg); border-radius: 12px; padding: 30px; margin-bottom: 40px;">
+                <div style="display: flex; align-items: center; gap: 20px;">
+                    <div style="width: 100px; height: 100px; border-radius: 50%; background: var(--primary); display: flex; align-items: center; justify-content: center; font-size: 40px; color: white;">
+                        <i class="fas fa-user"></i>
+                    </div>
+                    <div>
+                        <h3 style="font-size: 24px; margin-bottom: 5px;">Бахытжан Бахтияр</h3>
+                        <p style="color: var(--gray); margin-bottom: 10px;">Premium подписка до 15.12.2027</p>
+                        <div style="display: flex; gap: 15px;">
+                            <button class="btn" style="padding: 10px 20px;"><i class="fas fa-edit"></i> Редактировать</button>
+                            <button class="btn" style="background: rgba(255, 255, 255, 0.1); padding: 10px 20px;"><i class="fas fa-cog"></i> Настройки</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="section-header">
+                <h2 class="section-title">Мои просмотры</h2>
+            </div>
+            
+            <div class="movie-grid">
+                <!-- 6 watched items -->
+                <div class="movie-card">
+                    <div class="movie-poster" style="background-image: url('https://avatars.mds.yandex.net/get-kinopoisk-image/1600647/430042eb-ee69-4818-aed0-a312400a26bf/600x900');">
+                        <div class="movie-hd">HD</div>
+                    </div>
+                    <div class="movie-info">
+                        <div class="movie-title">Интерстеллар</div>
+                        <div class="movie-meta">
+                            <span>Просмотрено 75%</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="movie-card">
+                    <div class="movie-poster" style="background-image: url('https://avatars.mds.yandex.net/get-kinopoisk-image/1629390/8ab9a119-dd74-44f0-baec-0629797483d7/220x330');">
+                        <div class="movie-hd">HD</div>
+                    </div>
+                    <div class="movie-info">
+                        <div class="movie-title">Начало</div>
+                        <div class="movie-meta">
+                            <span>Просмотрено 100%</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="movie-card">
+                    <div class="movie-poster" style="background-image: url('https://avatars.mds.yandex.net/get-kinopoisk-image/4774061/cf1970bc-3f08-4e0e-a095-2fb57c3aa7c6/600x900');">
+                        <div class="movie-hd">4K</div>
+                    </div>
+                    <div class="movie-info">
+                        <div class="movie-title">Матрица</div>
+                        <div class="movie-meta">
+                            <span>Просмотрено 90%</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="movie-card">
+                    <div class="movie-poster" style="background-image: url('https://avatars.mds.yandex.net/get-kinopoisk-image/1773646/d7e3dbd6-e4a9-4485-b751-d02f49825166/220x330');">
+                        <div class="movie-hd">HD</div>
+                    </div>
+                    <div class="movie-info">
+                        <div class="movie-title">Пираты Карибского моря</div>
+                        <div class="movie-meta">
+                            <span>Просмотрено 100%</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="section-header" style="margin-top: 50px;">
+                <h2 class="section-title">Мои подборки</h2>
+            </div>
+            
+            <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 25px;">
+                <div style="background: var(--card-bg); border-radius: 12px; padding: 20px;">
+                    <h3 style="font-size: 20px; margin-bottom: 15px;"><i class="fas fa-heart" style="color: var(--accent); margin-right: 10px;"></i> Избранное</h3>
+                    <p style="color: var(--gray); margin-bottom: 15px;">12 фильмов и сериалов</p>
+                    <button class="btn" style="padding: 8px 20px; width: 100%;">Просмотреть</button>
+                </div>
+                
+                <div style="background: var(--card-bg); border-radius: 12px; padding: 20px;">
+                    <h3 style="font-size: 20px; margin-bottom: 15px;"><i class="fas fa-clock" style="color: var(--primary); margin-right: 10px;"></i> Смотреть позже</h3>
+                    <p style="color: var(--gray); margin-bottom: 15px;">8 фильмов и сериалов</p>
+                    <button class="btn" style="padding: 8px 20px; width: 100%;">Просмотреть</button>
+                </div>
+                
+                <div style="background: var(--card-bg); border-radius: 12px; padding: 20px;">
+                    <h3 style="font-size: 20px; margin-bottom: 15px;"><i class="fas fa-history" style="color: #9c27b0; margin-right: 10px;"></i> История просмотров</h3>
+                    <p style="color: var(--gray); margin-bottom: 15px;">24 фильма и сериала</p>
+                    <button class="btn" style="padding: 8px 20px; width: 100%;">Просмотреть</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>О проекте</h3>
+                    <p style="color: var(--gray); margin-bottom: 20px;">Кино-Портал - это современная платформа для просмотра фильмов и сериалов с обширной библиотекой контента.</p>
+                    <div class="social-links">
+                        <a href="#"><i class="fab fa-vk"></i></a>
+                        <a href="#"><i class="fab fa-telegram"></i></a>
+                        <a href="#"><i class="fab fa-youtube"></i></a>
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                    </div>
+                </div>
+                
+                <div class="footer-section">
+                    <h3>Разделы</h3>
+                    <ul class="footer-links">
+                        <li><a href="#" data-page="home"><i class="fas fa-home"></i> Главная</a></li>
+                        <li><a href="#" data-page="movies"><i class="fas fa-ticket-alt"></i> Фильмы</a></li>
+                        <li><a href="#" data-page="series"><i class="fas fa-tv"></i> Сериалы</a></li>
+                        <li><a href="#" data-page="profile"><i class="fas fa-user"></i> Профиль</a></li>
+                        <li><a href="#"><i class="fas fa-star"></i> Рейтинги</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-section">
+                    <h3>Помощь</h3>
+                    <ul class="footer-links">
+                        <li><a href="#"><i class="fas fa-question-circle"></i> FAQ</a></li>
+                        <li><a href="#"><i class="fas fa-phone-alt"></i> Поддержка</a></li>
+                        <li><a href="#"><i class="fas fa-gavel"></i> Правовая информация</a></li>
+                        <li><a href="#"><i class="fas fa-ad"></i> Реклама</a></li>
+                        <li><a href="#"><i class="fas fa-briefcase"></i> Вакансии</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-section">
+                    <h3>Приложение</h3>
+                    <p style="color: var(--gray); margin-bottom: 20px;">Скачайте наше приложение для лучшего опыта просмотра</p>
+                    <div class="app-download">
+                        <a href="#" class="app-btn" style="color: white;">
+                            <i class="fab fa-apple" style="font-size: 24px; margin-right: 10px;"></i>
+                            <div>
+                                <div style="font-size: 10px;"></div>
+                                <div style="font-weight: 600;">App Store</div>
+                            </div>
+                        </a>
+                        <a href="#" class="app-btn" style="color: white;">
+                            <i class="fab fa-google-play" style="font-size: 20px; margin-right: 10px;"></i>
+                            <div>
+                                <div style="font-size: 10px;"></div>
+                                <div style="font-weight: 600;">Google Play</div>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="copyright">
+                <p>&copy; 2023 Кино-Портал. Все права защищены.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Page navigation
+        document.addEventListener('DOMContentLoaded', function() {
+            const pages = document.querySelectorAll('.page');
+            const navLinks = document.querySelectorAll('nav a, .footer-links a');
+            
+            // Navigation click handler
+            navLinks.forEach(link => {
+                link.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    
+                    const targetPage = this.getAttribute('data-page');
+                    
+                    // Hide all pages
+                    pages.forEach(page => {
+                        page.classList.remove('active');
+                    });
+                    
+                    // Show target page
+                    document.getElementById(targetPage).classList.add('active');
+                    
+                    // Update active link
+                    document.querySelectorAll('nav a').forEach(link => {
+                        link.classList.remove('active');
+                    });
+                    this.classList.add('active');
+                    
+                    // Scroll to top
+                    window.scrollTo(0, 0);
+                });
+            });
+            
+            // Category selection
+            const categories = document.querySelectorAll('.category');
+            categories.forEach(category => {
+                category.addEventListener('click', function() {
+                    categories.forEach(c => c.classList.remove('active'));
+                    this.classList.add('active');
+                });
+            });
+            
+            // Movie card hover effect
+            const movieCards = document.querySelectorAll('.movie-card');
+            movieCards.forEach(card => {
+                card.addEventListener('mouseenter', function() {
+                    this.style.transform = 'translateY(-10px)';
+                });
+                
+                card.addEventListener('mouseleave', function() {
+                    this.style.transform = 'translateY(0)';
+                });
+            });
+            
+            // Search functionality
+            const searchInput = document.querySelector('.search-bar input');
+            if (searchInput) {
+                searchInput.addEventListener('keypress', function(e) {
+                    if (e.key === 'Enter' && this.value.trim() !== '') {
+                        alert('Поиск: ' + this.value);
+                        this.value = '';
+                    }
+                });
+            }
+            
+            // Actors navigation
+            let currentActorSlide = 1;
+            const totalActorSlides = 2;
+            
+            document.getElementById('prev-actors').addEventListener('click', function() {
+                if (currentActorSlide > 1) {
+                    document.getElementById(`actors-slide-${currentActorSlide}`).style.display = 'none';
+                    currentActorSlide--;
+                    document.getElementById(`actors-slide-${currentActorSlide}`).style.display = 'flex';
+                    
+                    // Update button states
+                    document.getElementById('prev-actors').disabled = currentActorSlide === 1;
+                    document.getElementById('next-actors').disabled = false;
+                }
+            });
+            
+            document.getElementById('next-actors').addEventListener('click', function() {
+                if (currentActorSlide < totalActorSlides) {
+                    document.getElementById(`actors-slide-${currentActorSlide}`).style.display = 'none';
+                    currentActorSlide++;
+                    document.getElementById(`actors-slide-${currentActorSlide}`).style.display = 'flex';
+                    
+                    // Update button states
+                    document.getElementById('next-actors').disabled = currentActorSlide === totalActorSlides;
+                    document.getElementById('prev-actors').disabled = false;
+                }
+            });
+            
+            // Disable prev button initially
+            document.getElementById('prev-actors').disabled = true;
+        });
+    </script>
+</body>
+</html>
